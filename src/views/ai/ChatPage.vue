@@ -1,43 +1,48 @@
 <template>
-    <CopilotKitProvider runtime-url="http://127.0.0.1:8080/api/copilotkit" agent-id="agentId" >
-        <CopilotChat 
-            style="height: 100vh; width: 100vw;" 
-            :labels="MyChatLabels" 
-        />
-        <CopilotChatAssistantMessage
-    :message="message"
-    @thumbs-up="(msg) => console.log('Thumbs up:', msg.id)"
-    @thumbs-down="(msg) => console.log('Thumbs down:', msg.id)"
-  />
-    </CopilotKitProvider>
-
-    
+  <CopilotKitProvider
+    runtime-url="http://127.0.0.1:8080/api/copilotkit"
    
-
+    :onError="handleError"
+  >
+    <div style="display: flex; height: 100vh;">
+      <CopilotThreadsDrawer
+        agent-id="default"
+        recent-label="历史对话"
+        @thread-select="handleThreadSelect"
+        @new-thread="handleNewThread"
+      />
+      <CopilotChat
+        style="flex: 1; height: 100vh;"
+        :labels="MyChatLabels"
+        :thread-id="currentThreadId"
+        :key="currentThreadId"
+      />
+    </div>
+  </CopilotKitProvider>
 </template>
 
 <script setup lang="ts">
-
-//必须引入样式 否则聊天界面没有样式
-import { CopilotChat, CopilotKitProvider } from "@copilotkit/vue";
-import "@copilotkit/vue/styles.css"
+import { ref } from "vue";
+import { CopilotChat, CopilotKitProvider, CopilotThreadsDrawer } from "@copilotkit/vue";
+import "@copilotkit/vue/styles.css";
 
 import { MyChatLabels } from "../../composables/copilotKit/utils.ts";
 
+const currentThreadId = ref<string>("");
 
-import { CopilotChatAssistantMessage } from "@copilotkit/vue/v2";
-import type { AssistantMessage } from "@ag-ui/core";
-const message: AssistantMessage = {
-  id: "1",
-  role: "assistant",
-  content: "Here is **Markdown** with a `code` sample.",
-};
+function handleThreadSelect(threadId: string) {
+  currentThreadId.value = threadId;
+}
 
+function handleNewThread() {
+  currentThreadId.value = "";
+}
 
-
-
-
-
-
-
+function handleError(event: {
+  error: Error;
+  code: string;
+  context: Record<string, any>;
+}) {
+  console.error("[CopilotKit Error]", event.code, event.error.message, event.context);
+}
 </script>
