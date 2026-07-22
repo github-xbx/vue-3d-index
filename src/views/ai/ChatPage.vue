@@ -1,7 +1,6 @@
 <template>
   <CopilotKitProvider
     runtime-url="http://127.0.0.1:8080/api/copilotkit"
-   
     :onError="handleError"
   >
     <div style="display: flex; height: 100vh;">
@@ -10,12 +9,12 @@
         recent-label="历史对话"
         @thread-select="handleThreadSelect"
         @new-thread="handleNewThread"
-      />
+      ></CopilotThreadsDrawer>
       <CopilotChat
         style="flex: 1; height: 100vh;"
         :labels="MyChatLabels"
+        agent-id="deepseek"
         :thread-id="currentThreadId"
-        :key="currentThreadId"
       />
     </div>
   </CopilotKitProvider>
@@ -28,14 +27,20 @@ import "@copilotkit/vue/styles.css";
 
 import { MyChatLabels } from "../../composables/copilotKit/utils.ts";
 
-const currentThreadId = ref<string>("");
+const currentThreadId = ref<string>();
 
 function handleThreadSelect(threadId: string) {
   currentThreadId.value = threadId;
+  console.log("Thread selected:", threadId);
 }
 
 function handleNewThread() {
-  currentThreadId.value = "";
+  // 设为 undefined：
+  // hasExplicitThreadId 为 false → 欢迎界面正常显示
+  // CopilotChat 内部会用 generatedThreadId 作为临时 ID
+  // 用户发送第一条消息时后端才会真正创建线程
+  currentThreadId.value = undefined;
+  console.log("New thread created (welcome screen visible)");
 }
 
 function handleError(event: {
