@@ -40,22 +40,7 @@ jobs:
               run: npm run build  # 执行 package.json 中的 build 脚本
 
 
-            # 【调试】列出 dist 目录的内容，确认构建产物存在
-            - name: List dist directory
-              run: |
-               echo "=== Contents of dist/ ==="
-               ls -la dist/ || echo "dist/ directory does NOT exist!"
-               echo "=========================="
-               echo "Number of files: $(find dist -type f 2>/dev/null | wc -l)"
-
-           
-
-            # 【调试】列出当前目录所有文件（含隐藏文件），看看 zip 有没有生成
-            - name: List all files before zip
-              run: ls -la
-
-
-            # 【核心】创建压缩包
+            # 5 创建压缩包
             - name: Create ZIP package
               run: |
                 ZIP_NAME="3d-index-app.zip"
