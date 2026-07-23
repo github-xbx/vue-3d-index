@@ -39,29 +39,13 @@ jobs:
             - name: Build project
               run: npm run build  # 执行 package.json 中的 build 脚本
 
-
-            # 5 创建压缩包
-            - name: Create ZIP package
-              run: |
-                ZIP_NAME="3d-index-app.zip"
-                echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
-                if [ -d "dist" ]; then
-                    cd dist
-                    zip -r ../$ZIP_NAME .
-                    cd ..
-                    echo "✅ ZIP created successfully!"
-                    ls -la $ZIP_NAME
-                else
-                    echo "❌ ERROR: dist/ directory not found!"
-                    exit 1
-                fi
             
-            # 6. 上传构建产物（ZIP 文件）作为工作流的输出    
-            - name: Upload zip artidact
+            # 5. 上传构建产物 作为工作流的输出    
+            - name: Upload zip artifact
               uses: actions/upload-artifact@v4
               with:
                   name: 3d-index                # Artifact 的名称（在 Actions 页面显示）
-                  path: ${{ env.ZIP_NAME }}     # 要上传的文件路径
+                  path: dist/                   # Vite 默认输出目录
                   if-no-files-found: error      # 如果文件不存在则报错，防止静默失败
                   retention-days: 30            # 指定保留天数（默认90天）
              
