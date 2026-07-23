@@ -39,19 +39,44 @@ jobs:
             - name: Build project
               run: npm run build  # 执行 package.json 中的 build 脚本
 
-            # 5. 创建压缩包（将 dist 目录打包为 .zip 文件） # 将当前目录（dist内容）压缩到父目录的 zip 文件中
+
+            # 【调试】列出 dist 目录的内容，确认构建产物存在
+            - name: List dist directory
+              run: |
+               echo "=== Contents of dist/ ==="
+               ls -la dist/ || echo "dist/ directory does NOT exist!"
+               echo "=========================="
+               echo "Number of files: $(find dist -type f 2>/dev/null | wc -l)"
+
+           
+
+            # 【调试】列出当前目录所有文件（含隐藏文件），看看 zip 有没有生成
+            - name: List all files before zip
+              run: ls -la
+
+
+            # 【核心】创建压缩包
             - name: Create ZIP package
               run: |
-                cd dist
-                zip -r ../my-vite-app.zip .   
-                cd ..
+                ZIP_NAME="3d-index-app.zip"
+                echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
+                if [ -d "dist" ]; then
+                    cd dist
+                    zip -r ../$ZIP_NAME .
+                    cd ..
+                    echo "✅ ZIP created successfully!"
+                    ls -la $ZIP_NAME
+                else
+                    echo "❌ ERROR: dist/ directory not found!"
+                    exit 1
+                fi
             
             # 6. 上传构建产物（ZIP 文件）作为工作流的输出    
             - name: Upload zip artidact
               uses: actions/upload-artifact@v4
               with:
                   name: 3d-index                # Artifact 的名称（在 Actions 页面显示）
-                  path: 3d-index-app.zip        # 要上传的文件路径
+                  path: ${{ env.ZIP_NAME }}     # 要上传的文件路径
                   if-no-files-found: error      # 如果文件不存在则报错，防止静默失败
                   retention-days: 30            # 指定保留天数（默认90天）
              
