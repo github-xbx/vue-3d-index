@@ -28,7 +28,7 @@ jobs:
             - name: Set up Node.js
               uses: actions/setup-node@v4
               with:
-                  node-version: '22.22.0'
+                  node-version: '22'
                   cache: 'npm'
 
             # 3. 安装依赖 (使用 npm ci 进行更快、更可靠的安装)    
@@ -52,6 +52,6 @@ jobs:
               with:
                   name: 3d-index                # Artifact 的名称（在 Actions 页面显示）
                   path: 3d-index-app.zip        # 要上传的文件路径
-                  if=no-files-found: error      # 如果文件不存在则报错，防止静默失败
+                  if-no-files-found: error      # 如果文件不存在则报错，防止静默失败
                   retention-days: 30            # 指定保留天数（默认90天）
              
