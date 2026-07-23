@@ -1,5 +1,5 @@
-import { defineComponent, ref } from 'vue'
-import { CopilotChat, CopilotKitProvider, CopilotThreadsDrawer } from "@copilotkit/vue";
+import { defineComponent } from 'vue'
+import { CopilotChat, CopilotKitProvider } from "@copilotkit/vue";
 import "@copilotkit/vue/styles.css";
 
 
