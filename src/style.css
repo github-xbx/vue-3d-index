@@ -74,3 +74,10 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.15);
 }
+
+
+
+copilotkit-threads-drawer {
+  --cpk-drawer-bg: oklch(0.97 0 0);
+}
+

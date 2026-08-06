@@ -4,7 +4,7 @@ import "@copilotkit/vue/styles.css";
 
 
 export default defineComponent({
-  name: 'ChatPage',
+  name: 'ChatPage1',
   setup() {
     //const currentThreadId = ref<string | null>(null)
 

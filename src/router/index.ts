@@ -17,12 +17,12 @@ const router = createRouter({
     {
       path: '/chat',
       name: 'Chat',
-      component: () => import('../views/ai/ChatPage.vue')
+      component: () => import('../views/ai/ChatPage.tsx')
     },
     {
-      path: '/chat-tsx',
+      path: '/chattsx',
       name: 'ChatTsx',
-      component: () => import('../views/tsx/Chat.tsx')
+      component: () => import('../views/ai/ChatPage.tsx')
     }
   ]
 })

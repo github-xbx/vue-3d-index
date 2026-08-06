@@ -1,5 +1,5 @@
 <template>
-  <CopilotKitProvider runtime-url="http://127.0.0.1:8080/api/copilotkit" :onError="handleError">
+  <CopilotKitProvider :runtime-url="url" :onError="handleError">
     <div style="display: flex; height: 100vh;">
       <CopilotThreadsDrawer 
         agent-id="default" 
@@ -28,6 +28,9 @@ import { MyChatLabels } from "../../composables/copilotKit/utils.ts";
 // 当前对话 threadId
 const currentThreadId = ref<string>();
 const chatKey = ref(0);
+const url = import.meta.env.VITE_AI_URL;
+
+
 
 function handleThreadSelect(threadId: string) {
   currentThreadId.value = threadId;
