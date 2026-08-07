@@ -17,13 +17,9 @@ const router = createRouter({
     {
       path: '/chat',
       name: 'Chat',
-      component: () => import('../views/ai/ChatPage.tsx')
+      component: () => import('../views/ai/ChatPage.vue')
     },
-    {
-      path: '/chattsx',
-      name: 'ChatTsx',
-      component: () => import('../views/ai/ChatPage.tsx')
-    }
+    
   ]
 })
 
