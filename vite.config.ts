@@ -20,6 +20,11 @@ export default defineConfig(({ command, mode }) => {
 
   return {
      plugins: [vue()],
+     optimizeDeps:{
+      include: [
+        'vue'
+      ]
+     },
      base: env.VITE_BASE_URL || '/',  //基础路径，影响所有资源引用
      publicDir: 'public',
   }
