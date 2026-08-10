@@ -11,24 +11,67 @@
         style="flex: 1; height: 100vh;" 
         :labels="MyChatLabels" 
         agent-id="deepseek"
+        :input-tools-menu="inputToolsMenu"
+        input-mode="processing"
+        suggestions="chatSuggestions"
         :thread-id="currentThreadId" 
         :key="chatKey" >
       </CopilotChat>
+      <SuggestionComponent />
     </div>
   </CopilotKitProvider>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { CopilotChat, CopilotKitProvider, CopilotThreadsDrawer } from "@copilotkit/vue";
+import { CopilotChat, CopilotKitProvider, CopilotThreadsDrawer  } from "@copilotkit/vue";
+import type { ToolsMenuItem } from "@copilotkit/vue";
 import "@copilotkit/vue/styles.css";
 
 import { MyChatLabels } from "../../composables/copilotKit/utils.ts";
+import SuggestionComponent from "../../components/ai/SuggestionComponent.vue";
+
+const url = import.meta.env.VITE_AI_URL;
 
 // 当前对话 threadId
 const currentThreadId = ref<string>();
 const chatKey = ref(0);
-const url = import.meta.env.VITE_AI_URL;
+
+const inputToolsMenu: (ToolsMenuItem | "-")[] = [
+  // 叶子菜单项（只有 action）
+  {
+    label: "思考",
+    action: () => console.log("思考")
+  },
+  {
+    label: "搜索",
+    action: () => console.log("搜索")
+  }
+  // 分隔符
+ // "-",
+  // 子菜单（有 items，无 action）
+  // {
+  //   label: "高级操作",
+  //   items: [
+  //     {
+  //       label: "导出",
+  //       action: () => console.log("导出")
+  //     },
+  //     {
+  //       label: "导入",
+  //       action: () => console.log("导入")
+  //     },
+  //     "-", // 子菜单内部也可以有分隔符
+  //     {
+  //       label: "批量处理",
+  //       items: [
+  //         { label: "全部", action: () => console.log("全部") },
+  //         { label: "部分", action: () => console.log("部分") }
+  //       ]
+  //     }
+  //   ]
+  // }
+];
 
 
 
