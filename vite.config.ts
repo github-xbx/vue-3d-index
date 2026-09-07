@@ -20,6 +20,9 @@ export default defineConfig(({ command, mode }) => {
 
   return {
      plugins: [vue()],
+     define: {
+       'import.meta.env.JAVA_QWEN_APIKEY': JSON.stringify(env.java_qwen_apikey) // 将环境变量注入到代码中
+     },
      optimizeDeps:{
       include: [
         'vue'

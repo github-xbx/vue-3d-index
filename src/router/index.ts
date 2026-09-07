@@ -18,6 +18,11 @@ const router = createRouter({
       path: '/copilot',
       name: 'Copilot',
       component: () => import('../views/ai/CopilotPage.vue')
+    },
+    {
+      path: '/test',
+      name: 'Test',
+      component: () => import('../views/langchain/Test.vue')
     }
   ]
 })

@@ -104,7 +104,7 @@ function handleError(event: {
 </script>
 
 <style scoped>
-copilotkit-threads-drawer {
+/* copilotkit-threads-drawer {
   --cpk-drawer-bg: oklch(0.97 0 0);
-}
+} */
 </style>
