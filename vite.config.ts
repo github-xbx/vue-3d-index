@@ -19,17 +19,29 @@ export default defineConfig(({ command, mode }) => {
   console.log('═══════════════════════════════════')
 
   return {
-     plugins: [vue()],
-     define: {
-       'import.meta.env.JAVA_QWEN_APIKEY': JSON.stringify(env.java_qwen_apikey) // 将环境变量注入到代码中
-     },
-     optimizeDeps:{
-      include: [
-        'vue'
-      ]
-     },
-     base: env.VITE_BASE_URL || '/',  //基础路径，影响所有资源引用
-     publicDir: 'public',
+    server: {
+      port: Number(env.VITE_APP_PORT) || 8080, // 端口号
+      open: false, // 启动服务时自动打开浏览器
+      strictPort: true,  // 端口被占用时直接失败，而不是换端口
+      // proxy: {
+      //   '/api': {
+      //     target: env.VITE_API_URL, // 代理目标地址
+      //     changeOrigin: true, // 是否改变请求源
+      //     rewrite: (path) => path.replace(/^\/api/, '') // 重写路径
+      //   }
+      // }
+    },
+    plugins: [vue()],
+    define: {
+      'import.meta.env.JAVA_QWEN_APIKEY': JSON.stringify(env.java_qwen_apikey) // 将环境变量注入到代码中
+    },
+    optimizeDeps:{
+    include: [
+      'vue'
+    ]
+    },
+    base: env.VITE_BASE_URL || '/',  //基础路径，影响所有资源引用
+    publicDir: 'public',
   }
 })
 
