@@ -23,6 +23,11 @@ const router = createRouter({
       path: '/test',
       name: 'Test',
       component: () => import('../views/langchain/Test.vue')
+    },
+    {
+      path: '/chat',
+      name: 'Chat',
+      component: () => import('../views/chat/DesignChat.vue')
     }
   ]
 })

@@ -1,6 +1,8 @@
 import { defineConfig, loadEnv} from 'vite'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
+import path from 'path'
+
 
 
 // https://vite.dev/config/
@@ -33,6 +35,11 @@ export default defineConfig(({ command, mode }) => {
       // }
     },
     plugins: [vue(), tailwindcss()],
+    resolve:{
+      alias: {
+        '@': path.resolve(__dirname, 'src')  // 设置 @ 指向 src 目录
+      }
+    },
     define: {
       'import.meta.env.JAVA_QWEN_APIKEY': JSON.stringify(env.java_qwen_apikey) // 将环境变量注入到代码中
     },

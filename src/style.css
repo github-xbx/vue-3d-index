@@ -1,6 +1,11 @@
-/* Tailwind v4：跳过 Preflight，避免与 Ant Design Vue 冲突 */
-@import "tailwindcss/theme.css";
-@import "tailwindcss/utilities.css";
+/* 1. 声明 @layer 顺序：确保 Tailwind 的 utilities 能覆盖 antdv-next 的组件样式 */
+@layer theme, base, antd, antdx, components, utilities;
 
-/* Ant Design Vue 样式 */
-@import 'ant-design-vue/dist/reset.css';
+/* 2. 导入 TailwindCSS v4 核心样式 */
+@import "tailwindcss";
+
+/* 3. 导入 antdv-next 的 Tailwind 插件（推荐使用 compat.css 入口） */
+@import "@antdv-next/tailwind/compat.css";
+
+/* 4. 导入 antdv-next 的重置样式（可选，但推荐） */
+@import 'antdv-next/dist/reset.css' layer(antd);
