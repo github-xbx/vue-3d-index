@@ -1,9 +1,11 @@
 <template>
     <div>
-        <div class="flex">
-            <div class="py-6 px-6 center">
-
-                <Welcome variant="borderless" 
+        <div class="flex flex-col">
+            <!-- 欢迎提示语 -->
+            <div class="flex flex-col justify-center items-center h-screen">
+                <Welcome    
+                    class="w-full md:w-2/3 lg:w-3/4 xl:2/3" 
+                    variant="borderless" 
                     icon="https://mdn.alipayobjects.com/huamei_iwk9zp/afts/img/A*s5sNRo5LjfQAAAAAAAAAAAAADgCCAQ/fmt.webp"
                     title="你好，我是智能助手 X" description="基于 Antdv Next 的 AGI 产品界面解决方案，打造更美好的智能愿景~">
                     <template #extra>
@@ -23,9 +25,20 @@
                 </Welcome>
 
                 <Prompts
+                    class="mt-6 w-full md:w-2/3 lg:w-3/4 xl:2/3"
+                    :styles= "{
+                        title: {
+                            'margin-top': '1em',  
+                            'margin-bottom': '1em',
+                        } 
+                    }"
+                    wrap 
                     title="✨ 灵感火花 和 提示。"
                     :items="items" >
                 </Prompts>
+            </div>
+            <div>
+                <DesignChatInput />
             </div>
         </div>
 
@@ -36,7 +49,7 @@
 import { EllipsisOutlined, ShareAltOutlined } from "@antdv-next/icons";
 import { Welcome, Prompts } from "@antdv-next/x";
 import type { PromptsClickInfo, PromptsProps } from "@antdv-next/x";
-
+import DesignChatInput from "@/components/chat/DesignChatInput.vue";
 
 
 //数据 
@@ -55,6 +68,18 @@ let items: PromptsProps['items'] = [
     },
     {
         key: '3',
+        label: '🚀 Launch Your Dreams',
+        description: 'Take your aspirations to new heights and achieve greatness.',
+       
+    },
+     {
+        key: '4',
+        label: '🚀 Launch Your Dreams',
+        description: 'Take your aspirations to new heights and achieve greatness.',
+       
+    },
+     {
+        key: '5',
         label: '🚀 Launch Your Dreams',
         description: 'Take your aspirations to new heights and achieve greatness.',
        
