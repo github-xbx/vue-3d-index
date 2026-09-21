@@ -4,18 +4,11 @@
             placeholder="给智能体一个提示，或者输入你想要的内容..." :suffix="false" :auto-size="{ minRows: 3, maxRows: 6 }"
             :on-submit="onSubmit" :on-cancel="onCancel">
             <template #header>
-                <SenderHeader title="Upload Sample" :open="open">
-                    <a-flex vertical align="center" gap="small" :style="{ marginBlock: '24px' }">
-                        <CloudUploadOutlined :style="{ fontSize: '4em' }" />
-                        <a-typography-title :level="5" :style="{ margin: 0 }">
-                            将文件拖至此处
-                        </a-typography-title>
-                        <a-typography-text type="secondary">
-                            Support pdf, doc, xlsx, ppt, txt, image file types
-                        </a-typography-text>
-                        <a-button @click="console.log('Mock select file')">
-                            Select File
-                        </a-button>
+                <SenderHeader  :open="true" :closable="false">
+                    <a-flex gap="small" wrap="wrap">
+                        <a-tag color="blue" v-if="deepThink">深度思考：开启</a-tag>
+                        <a-tag color="green">联网搜索</a-tag>
+                        <a-tag color="gold">低温度</a-tag>
                     </a-flex>
                 </SenderHeader>
             </template>
@@ -29,11 +22,12 @@
                                 <PaperClipOutlined />
                             </template>
                         </a-button>
-                        <SenderSwitch :value="false">
+                        <SenderSwitch :value="deepThink" :on-change="(checked: boolean) => (deepThink = checked)">
                             <template #icon>
                                 <OpenAIOutlined />
                             </template>
-                            <template #checkedChildren>
+                            深度思考
+                            <!-- <template #checkedChildren>
                                 <div>
                                     深度搜索：
                                     <span class="inline-flex w-7 justify-center items-center">开启</span>
@@ -44,29 +38,35 @@
                                     深度搜索：
                                     <span>关闭</span>
                                 </div>
-                            </template>
+                            </template> -->
                         </SenderSwitch>
-                        <a-dropdown :menu="{
-                            selectedKeys: [activeAgentKey],
-                            // onClick: agentItemClick,
-                            items: agentItems,
-                        }">
-                            <template #iconRender="{ key }">
+                        <a-dropdown>
 
-                                <SearchOutlined v-if="key === 'deep_search'" />
-                                <CodeOutlined v-else-if="key === 'ai_code'" />
-                                <EditOutlined v-else-if="key === 'ai_writing'" />
-                            </template>
-                            <SenderSwitch :value="false">
+                             <SenderSwitch :value="false">
                                 <template #icon>
                                     <AntDesignOutlined />
                                 </template>
-                                Agent
+                                Model
                             </SenderSwitch>
+
+                            <template #overlay>
+                                <a-menu 
+                                  :select-keys="[activeAgentKey]"
+                                  :items="agentItems" 
+                                  @click="agentItemClick" 
+                                />
+                            </template>
+                           
+                           
                         </a-dropdown>
                         <a-dropdown>
-                            <template #iconRender="{ key }">
-                                <FileImageOutlined v-if="key === 'file_image'" />
+                            <template #overlay>
+                                <a-menu>
+                                    <a-menu-item >
+                                        <CloudUploadOutlined />
+                                        上传文件
+                                    </a-menu-item>
+                                </a-menu>
                             </template>
                             <SenderSwitch :value="false">
                                 <template #icon>
@@ -99,6 +99,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Sender, SenderSwitch, SenderHeader } from "@antdv-next/x";
+import type { MenuProps } from "antdv-next";
 import {
     PaperClipOutlined,
     OpenAIOutlined,
@@ -115,10 +116,12 @@ import { agentItems, type SenderProps } from "@/hooks/chat/useChatInput.ts";
 
 
 
+
 //变量
 const activeAgentKey = ref("ai_writing");
 const loading = ref(false)
 const open = ref(false)
+const deepThink = ref(false)
 const senderInput = ref('');
 
 //方法
@@ -133,10 +136,17 @@ const onSubmit: SenderProps["onSubmit"] = (message: string, _, skill) => {
     //请求大模型后台
     loading.value = false;
 }
+
+
 const onCancel = () => {
     console.log("取消输入");
 }
 
+
+const agentItemClick: MenuProps["onClick"] = item => {
+    activeAgentKey.value = item.key as string;
+    console.log(`Agent item clicked: ${item}`);
+}
 
 
 
