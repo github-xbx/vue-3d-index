@@ -1,24 +1,104 @@
 <template>
 
-    <BubbleList :items="bubbleItems" :role="roleConfig" >
-
+    <BubbleList :items="bubbleItems" :role="roleConfig">
     </BubbleList>
 </template>
 
 <script setup lang="ts">
-import {computed, h, shallowRef} from 'vue';
-import { BubbleList } from '@antdv-next/x';
-import type {BubbleListProps} from "@antdv-next/x";
+import {computed,  ref ,h, onMounted } from 'vue';
+import { BubbleList, ThoughtChain, Think} from '@antdv-next/x';
+import type {BubbleListProps, BubbleItemType, } from "@antdv-next/x";
+import { XMarkdown } from "@antdv-next/x-markdown";
+import type { ComponentProps } from "@antdv-next/x-markdown";
+import {GlobalOutlined} from '@antdv-next/icons'
+import {THOUGHT_CHAIN_CONFIG} from "@/hooks/chat/useDesignChat";
 
 
 
 
 
+// function footerItems(
+//   id?: string | number,
+//   content = "",
+//   status?: MessageInfo<ChatMessage>["status"],
+//   extraInfo?: ChatMessage["extraInfo"],
+// ) {
+//   if (!id || status === "loading" || status === "updating") {
+//     return [];
+//   }
+
+//   return [
+//     // {
+//     //   key: "pagination",
+//     //   actionRender: () =>
+//     //     h(Pagination, {
+//     //       simple: true,
+//     //       total: 1,
+//     //       pageSize: 1,
+//     //     }),
+//     // },
+//     {
+//       key: "retry",
+//       label: locale.value.retry,
+//       icon: h(SyncOutlined),
+//       onItemClick: () => {
+//         onReload(id, {
+//           userAction: "retry",
+//         });
+//       },
+//     },
+//     {
+//       key: "copy",
+//       actionRender: () => h(ActionsCopy, { text: content }),
+//     },
+//     {
+//       key: "audio",
+//       actionRender: () =>
+//         h(ActionsAudio, {
+//           onClick: () => {
+//             message.info(locale.value.isMock);
+//           },
+//         }),
+//     },
+//     {
+//       key: "feedback",
+//       actionRender: () =>
+//         h(ActionsFeedback, {
+//           value: extraInfo?.feedback || "default",
+//           styles: {
+//             liked: {
+//               color: "#f759ab",
+//             },
+//           },
+//           onChange: (value: ActionsFeedbackProps["value"]) => {
+//             setMessage(id, {
+//               extraInfo: {
+//                 feedback: value,
+//               },
+//             });
+//             message.success(`${id}: ${value}`);
+//           },
+//         }),
+//     },
+//   ];
+// }
+
+onMounted(() => {
+  bubbleItems.value.push({
+    key: "12",
+    role: "assistant",
+    content: "### 你好",
+  })
+   bubbleItems.value.push({
+    key: "12",
+    role: "user",
+    content: "### 你也好",
+  })
+})
 
 
 
-
-const bubbleItems = computed<BubbleListProps["items"]>(() => []);
+const bubbleItems = ref<BubbleItemType[]>([])
 
 const roleConfig = computed<BubbleListProps["role"]>(() => ({
   assistant: {
@@ -40,29 +120,33 @@ const roleConfig = computed<BubbleListProps["role"]>(() => ({
         title: config.title,
       });
     },
-    footer: (content: string, info: any) => {
-      const items = footerItems(info.key, content, info.status, info.extraInfo);
+    // footer: (content: string, info: any) => {
+    //   const items = footerItems(info.key, content, info.status, info.extraInfo);
 
-      if (!items.length) {
-        return null;
-      }
+    //   if (!items.length) {
+    //     return null;
+    //   }
 
-      return h("div", { style: { display: "flex" } }, [h(Actions, { items })]);
-    },
+    //   return h("div", { style: { display: "flex" } }, [h(Actions, { items })]);
+    // },
     contentRender: (content: string, info: any) =>
       h(XMarkdown, {
         content: content.replace(/\n\n/g, "<br/><br/>"),
-        className: markdownClass.value,
+        className: "x-markdown-light",
         paragraphTag: "div",
         components: {
-          think: (props: ComponentProps) =>
-            h(thinkComponent, {
-              ...props,
-              chatStatus: info.status,
+          think: (props: ComponentProps, { slots }) =>
+            h(Think, {
+              title: props.streamStatus === "loading" ? "思考中..." : "已深度思考",
+              loading: props.streamStatus === "loading",
+              blink: props.streamStatus === "loading",
+              defaultExpanded: props.streamStatus !== "loading",
+            }, {
+              default: () => slots.default?.(),
             }),
         },
         streaming: {
-          hasNextChunk: info.status === "updating",
+          hasNextChunk: info.status === "loading" || info.status === "updating",
           enableAnimation: true,
         },
       }),
@@ -71,6 +155,24 @@ const roleConfig = computed<BubbleListProps["role"]>(() => ({
     placement: "end",
   },
 }));
+
+
+
+
+
+const addUserMessage = (message: String, key: string) => {
+  bubbleItems.value.push({
+    key: key,
+    role: "user",
+    content: message
+  })
+}
+
+
+// 暴露给父组件
+defineExpose({
+  addUserMessage,
+})
 
 
 </script>
