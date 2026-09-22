@@ -110,11 +110,10 @@ import {
 } from "@antdv-next/icons";
 import { agentItems, type SenderProps } from "@/hooks/chat/useDesignChat";
 
-// 通过 emit 把“请求”发给父组件
-const emit = defineEmits<{
-  (e: 'userSend'): void,
-  (e: 'aiSend'): void
-}>()
+import { useSubmitStore} from "@/hooks/chat/useChatMessage";
+
+
+const messageStore = useSubmitStore()
 
 
 //变量
@@ -132,6 +131,7 @@ const senderInput = ref('');
 const onSubmit: SenderProps["onSubmit"] = (message: string, _, skill) => {
     loading.value = true;
     
+    messageStore.submitData(message,"user");
     senderInput.value = '';
     //请求大模型后台
     loading.value = false;

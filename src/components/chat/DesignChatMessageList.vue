@@ -13,6 +13,7 @@ import type { ComponentProps } from "@antdv-next/x-markdown";
 import {GlobalOutlined} from '@antdv-next/icons'
 import {THOUGHT_CHAIN_CONFIG} from "@/hooks/chat/useDesignChat";
 
+import { useSubmitStore} from "@/hooks/chat/useChatMessage";
 
 
 
@@ -84,21 +85,23 @@ import {THOUGHT_CHAIN_CONFIG} from "@/hooks/chat/useDesignChat";
 // }
 
 onMounted(() => {
-  bubbleItems.value.push({
-    key: "12",
-    role: "assistant",
-    content: "### 你好",
-  })
-   bubbleItems.value.push({
-    key: "12",
-    role: "user",
-    content: "### 你也好",
-  })
+  // bubbleItems.value.push({
+  //   key: "12",
+  //   role: "assistant",
+  //   content: "### 你好",
+  // })
+  //  bubbleItems.value.push({
+  //   key: "12",
+  //   role: "user",
+  //   content: "### 你也好",
+  // })
 })
 
 
+const messageStore =  useSubmitStore();
 
-const bubbleItems = ref<BubbleItemType[]>([])
+
+const bubbleItems = messageStore.dataList;
 
 const roleConfig = computed<BubbleListProps["role"]>(() => ({
   assistant: {
@@ -160,18 +163,12 @@ const roleConfig = computed<BubbleListProps["role"]>(() => ({
 
 
 
-const addUserMessage = (message: String, key: string) => {
-  bubbleItems.value.push({
-    key: key,
-    role: "user",
-    content: message
-  })
-}
+
 
 
 // 暴露给父组件
 defineExpose({
-  addUserMessage,
+ 
 })
 
 
