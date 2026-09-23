@@ -3,13 +3,7 @@ import { HumanMessage } from "@langchain/core/messages";
 
 
 export class AliyunModel {
-
-
-
     public qwen(): ChatOpenAI{
-
-        
-
         // 创建 open ai 实例，使用的模型需兼容 openai 的接口
         const qwenModel = new ChatOpenAI({
             apiKey: import.meta.env.JAVA_QWEN_APIKEY,
@@ -19,9 +13,7 @@ export class AliyunModel {
             },
             temperature: 0.9,
         });
-
         return qwenModel;
-
     }
 
     /**
