@@ -1,13 +1,15 @@
 <template>
-
+  <div>
     <BubbleList :items="bubbleItems" :role="roleConfig">
     </BubbleList>
+  </div>
+    
 </template>
 
 <script setup lang="ts">
-import {computed,  ref ,h, onMounted } from 'vue';
+import {computed ,h, onMounted } from 'vue';
 import { BubbleList, ThoughtChain, Think} from '@antdv-next/x';
-import type {BubbleListProps, BubbleItemType, } from "@antdv-next/x";
+import type {BubbleListProps, } from "@antdv-next/x";
 import { XMarkdown } from "@antdv-next/x-markdown";
 import type { ComponentProps } from "@antdv-next/x-markdown";
 import {GlobalOutlined} from '@antdv-next/icons'
