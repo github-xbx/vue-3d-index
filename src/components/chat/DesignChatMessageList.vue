@@ -7,15 +7,15 @@
 </template>
 
 <script setup lang="ts">
-import {computed ,h, onMounted } from 'vue';
-import { BubbleList, ThoughtChain, Think} from '@antdv-next/x';
+import {computed ,h } from 'vue';
+import { BubbleList, ThoughtChain, Think, type BubbleItemType} from '@antdv-next/x';
 import type {BubbleListProps, } from "@antdv-next/x";
 import { XMarkdown } from "@antdv-next/x-markdown";
 import type { ComponentProps } from "@antdv-next/x-markdown";
 import {GlobalOutlined} from '@antdv-next/icons'
-import {THOUGHT_CHAIN_CONFIG} from "@/hooks/chat/useDesignChat";
+import {THOUGHT_CHAIN_CONFIG, messages} from "@/hooks/chat/useDesignChat";
 
-import { useSubmitStore} from "@/hooks/chat/useChatMessage";
+
 
 
 
@@ -86,24 +86,19 @@ import { useSubmitStore} from "@/hooks/chat/useChatMessage";
 //   ];
 // }
 
-onMounted(() => {
-  // bubbleItems.value.push({
-  //   key: "12",
-  //   role: "assistant",
-  //   content: "### 你好",
-  // })
-  //  bubbleItems.value.push({
-  //   key: "12",
-  //   role: "user",
-  //   content: "### 你也好",
-  // })
+
+
+
+const bubbleItems = computed<BubbleItemType[]>(() => {
+  console.log(messages.value);
+  return messages.value.map((info) => ({
+    key: info.id,
+    role: info.message.role,
+    content: info.message.content,
+    status: info.status,
+  }))
 })
 
-
-const messageStore =  useSubmitStore();
-
-
-const bubbleItems = messageStore.dataList;
 
 const roleConfig = computed<BubbleListProps["role"]>(() => ({
   assistant: {
@@ -134,27 +129,27 @@ const roleConfig = computed<BubbleListProps["role"]>(() => ({
 
     //   return h("div", { style: { display: "flex" } }, [h(Actions, { items })]);
     // },
-    contentRender: (content: string, info: any) =>
-      h(XMarkdown, {
-        content: content.replace(/\n\n/g, "<br/><br/>"),
-        className: "x-markdown-light",
-        paragraphTag: "div",
-        components: {
-          think: (props: ComponentProps, { slots }) =>
-            h(Think, {
-              title: props.streamStatus === "loading" ? "思考中..." : "已深度思考",
-              loading: props.streamStatus === "loading",
-              blink: props.streamStatus === "loading",
-              defaultExpanded: props.streamStatus !== "loading",
-            }, {
-              default: () => slots.default?.(),
-            }),
-        },
-        streaming: {
-          hasNextChunk: info.status === "loading" || info.status === "updating",
-          enableAnimation: true,
-        },
-      }),
+    // contentRender: (content: string, info: any) =>
+    //   h(XMarkdown, {
+    //     content: content.replace(/\n\n/g, "<br/><br/>"),
+    //     className: "x-markdown-light",
+    //     paragraphTag: "div",
+    //     components: {
+    //       think: (props: ComponentProps, { slots }) =>
+    //         h(Think, {
+    //           title: props.streamStatus === "loading" ? "思考中..." : "已深度思考",
+    //           loading: props.streamStatus === "loading",
+    //           blink: props.streamStatus === "loading",
+    //           defaultExpanded: props.streamStatus !== "loading",
+    //         }, {
+    //           default: () => slots.default?.(),
+    //         }),
+    //     },
+    //     streaming: {
+    //       hasNextChunk: info.status === "loading" || info.status === "updating",
+    //       enableAnimation: true,
+    //     },
+    //   }),
   },
   user: {
     placement: "end",

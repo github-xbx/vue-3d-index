@@ -108,12 +108,9 @@ import {
     ProfileOutlined,
     CloudUploadOutlined
 } from "@antdv-next/icons";
-import { agentItems, type SenderProps } from "@/hooks/chat/useDesignChat";
-
-import { useSubmitStore} from "@/hooks/chat/useChatMessage";
+import { agentItems, type SenderProps, handleLangChainRequest } from "@/hooks/chat/useDesignChat";
 
 
-const messageStore = useSubmitStore()
 
 
 //变量
@@ -128,12 +125,13 @@ const senderInput = ref('');
 /**
  * 消息提交
  */
-const onSubmit: SenderProps["onSubmit"] = (message: string, _, skill) => {
+const onSubmit: SenderProps["onSubmit"] = async (message: string, _, skill) => {
+    console.log(skill)
     loading.value = true;
-    
-    messageStore.submitData(message,"user");
     senderInput.value = '';
     //请求大模型后台
+    await handleLangChainRequest(message);
+
     loading.value = false;
 }
 

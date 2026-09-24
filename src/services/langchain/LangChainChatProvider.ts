@@ -1,4 +1,4 @@
-import { AbstractChatProvider, type TransformMessage, type XRequestOptions } from "@antdv-next/x-sdk"
+import { AbstractChatProvider,XRequest, type TransformMessage, type XRequestOptions } from "@antdv-next/x-sdk"
 
 
 /**-------- 类型定义 -------- */
@@ -17,20 +17,25 @@ interface LangChainMessage {
   role: 'user' | 'assistant'
 }
 
-
 class LangChainChatProvider extends AbstractChatProvider<LangChainMessage, LangChainInput, LangChainOutput> {
 
 
     constructor() {
         // 传入一个空的 XRequest（manual 模式），实际请求由 LangChain 接管
-        super({ request: (() => ({})) as any })
+       // 占位请求：manual 模式下不会 init()，永远不会真的发出去
+        super({
+            request: XRequest<LangChainInput, LangChainOutput, LangChainMessage>(
+                '/api/langchain-placeholder',
+                { manual: true },
+            ),
+        })
         
     }
 
 
     /** 合并外部传入的 request 配置与 onRequest 参数 */
     transformParams(requestParams: Partial<LangChainInput>, options: XRequestOptions<LangChainInput, LangChainOutput, LangChainMessage>): LangChainInput {
-        
+        console.debug('DEBUG => ',options)
         return {
             query: requestParams.query || '',
             history: requestParams.history || [],
@@ -57,6 +62,7 @@ class LangChainChatProvider extends AbstractChatProvider<LangChainMessage, LangC
     transformMessage(info: TransformMessage<LangChainMessage, LangChainOutput>): LangChainMessage {
         const { originMessage, chunks, status } = info
 
+        console.debug(originMessage, status)
         //将所有的 chunk 的 content 拼接成完整的文本
         const fullContent = chunks.map((c) => c?.content || '').join('');
 
