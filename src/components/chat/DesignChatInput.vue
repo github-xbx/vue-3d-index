@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Sender v-model:value="senderInput" submitType="shiftEnter" :loading="loading"
+        <Sender v-model:value="senderInput" submitType="shiftEnter" :loading="isRequesting"
             placeholder="给智能体一个提示，或者输入你想要的内容..." :suffix="false" :auto-size="{ minRows: 3, maxRows: 6 }"
             :on-submit="onSubmit" :on-cancel="onCancel">
             <template #header>
@@ -108,14 +108,14 @@ import {
     ProfileOutlined,
     CloudUploadOutlined
 } from "@antdv-next/icons";
-import { agentItems, type SenderProps, handleLangChainRequest } from "@/hooks/chat/useDesignChat";
+import { agentItems, type SenderProps, handleLangChainRequest, isRequesting } from "@/hooks/chat/useDesignChat";
 
 
 
 
 //变量
 const activeAgentKey = ref("ai_writing");
-const loading = ref(false)
+
 const open = ref(false)
 const deepThink = ref(false)
 const senderInput = ref('');
@@ -126,13 +126,17 @@ const senderInput = ref('');
  * 消息提交
  */
 const onSubmit: SenderProps["onSubmit"] = async (message: string, _, skill) => {
+
+    if(!message.trim()) 
+        return;
+
     console.log(skill)
-    loading.value = true;
+ 
     senderInput.value = '';
     //请求大模型后台
-    await handleLangChainRequest(message);
+    handleLangChainRequest(message);
 
-    loading.value = false;
+
 }
 
 

@@ -7,7 +7,7 @@ export class AliyunModel {
         // 创建 open ai 实例，使用的模型需兼容 openai 的接口
         const qwenModel = new ChatOpenAI({
             apiKey: import.meta.env.JAVA_QWEN_APIKEY,
-            model: "glm-5.2",
+            model: "qwen3.7-flash",
             configuration: {
                 baseURL: "https://ws-2gcnpdewhflb89dx.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
             },
@@ -36,11 +36,11 @@ export class AliyunModel {
      * 流式输出
      * @param prompt 
      */
-    public async chatStream(prompt: string): Promise<ReadableStream> {
+    public chatStream(prompt: string, signal?: AbortSignal): Promise<ReadableStream> {
         const messages = [new HumanMessage(prompt)];
 
         // 1. 调用 .stream() 获取一个异步迭代器
-        const stream = await this.qwen().stream(messages);
+        const stream = this.qwen().stream(messages, {signal});
 
        return stream;
 
