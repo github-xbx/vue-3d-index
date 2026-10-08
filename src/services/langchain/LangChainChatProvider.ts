@@ -32,7 +32,7 @@ class LangChainChatProvider extends AbstractChatProvider<LangChainMessage, LangC
 
     /** 合并外部传入的 request 配置与 onRequest 参数 */
     transformParams(requestParams: Partial<LangChainInput>, options: XRequestOptions<LangChainInput, LangChainOutput, LangChainMessage>): LangChainInput {
-       
+       console.log(options)
         return {
             query: requestParams.query || '',
             history: requestParams.history || [],
