@@ -127,10 +127,9 @@ const provider = new LangChainChatProvider(langchainRequest);
 
 
 // ---- 3. useXChat 管理数据流 ----
-const {messages,onRequest,isRequesting,abort} = useXChat({
+const {messages,onRequest,isRequesting,abort, onReload} = useXChat({
   provider,
   requestPlaceholder: (): LangChainMessage => ({
-   
     content: '思考中...',
     role: "assistant",
   }),
@@ -150,5 +149,5 @@ const handleLangChainRequest = (userQuery:string) => {
 }
 
 
-export { agentItems, THOUGHT_CHAIN_CONFIG, messages, handleLangChainRequest, isRequesting, abort };
+export { agentItems, THOUGHT_CHAIN_CONFIG, messages, handleLangChainRequest, isRequesting, abort, onReload };
 export type { SenderProps, ChatMessage,MessageInfo };

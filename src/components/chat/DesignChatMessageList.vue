@@ -8,84 +8,45 @@
 
 <script setup lang="ts">
 import { computed, defineComponent, h, ref, watch } from 'vue';
-import { BubbleList, ThoughtChain, Think, type BubbleItemType } from '@antdv-next/x';
+import { BubbleList, ThoughtChain, Think, type BubbleItemType, ActionsCopy, Actions } from '@antdv-next/x';
 import type { BubbleListProps, } from "@antdv-next/x";
 import { XMarkdown } from "@antdv-next/x-markdown";
 // x-markdown-light 这个 class 的样式来自主题包，不引入的话标题/表格/代码块/段落间距全都不生效
 import "@antdv-next/x-markdown/themes/light.css";
-import { GlobalOutlined } from '@antdv-next/icons'
-import { THOUGHT_CHAIN_CONFIG, messages } from "@/hooks/chat/useDesignChat";
+import { GlobalOutlined, SyncOutlined } from '@antdv-next/icons'
+import { THOUGHT_CHAIN_CONFIG, messages, onReload,} from "@/hooks/chat/useDesignChat";
+import type { ChatMessage, MessageInfo  } from "@/hooks/chat/useDesignChat";
 
 
 
 
+function footerItems(
+  id?: string | number,
+  content = "",
+  lastMessage: string | undefined = "",
+  status?: MessageInfo<ChatMessage>["status"],
+  extraInfo?: ChatMessage["extraInfo"],
+) {
+  console.log("footerItems", extraInfo);
+  if (!id || status === "loading" || status === "updating") {
+    return [];
+  }
 
-
-// function footerItems(
-//   id?: string | number,
-//   content = "",
-//   status?: MessageInfo<ChatMessage>["status"],
-//   extraInfo?: ChatMessage["extraInfo"],
-// ) {
-//   if (!id || status === "loading" || status === "updating") {
-//     return [];
-//   }
-
-//   return [
-//     // {
-//     //   key: "pagination",
-//     //   actionRender: () =>
-//     //     h(Pagination, {
-//     //       simple: true,
-//     //       total: 1,
-//     //       pageSize: 1,
-//     //     }),
-//     // },
-//     {
-//       key: "retry",
-//       label: locale.value.retry,
-//       icon: h(SyncOutlined),
-//       onItemClick: () => {
-//         onReload(id, {
-//           userAction: "retry",
-//         });
-//       },
-//     },
-//     {
-//       key: "copy",
-//       actionRender: () => h(ActionsCopy, { text: content }),
-//     },
-//     {
-//       key: "audio",
-//       actionRender: () =>
-//         h(ActionsAudio, {
-//           onClick: () => {
-//             message.info(locale.value.isMock);
-//           },
-//         }),
-//     },
-//     {
-//       key: "feedback",
-//       actionRender: () =>
-//         h(ActionsFeedback, {
-//           value: extraInfo?.feedback || "default",
-//           styles: {
-//             liked: {
-//               color: "#f759ab",
-//             },
-//           },
-//           onChange: (value: ActionsFeedbackProps["value"]) => {
-//             setMessage(id, {
-//               extraInfo: {
-//                 feedback: value,
-//               },
-//             });
-//             message.success(`${id}: ${value}`);
-//           },
-//         }),
-//     },
-//   ];
-// }
+  return [
+    {
+      key: "retry",
+      label: "重新生成",
+      icon: h(SyncOutlined),
+      onItemClick: () => {
+        onReload(id, {query: lastMessage || ""});
+      },
+    },
+    {
+      key: "copy",
+      actionRender: () => h(ActionsCopy, { text: content }),
+    },
+  ];
+}
 
 
 
@@ -121,7 +82,7 @@ const ThinkBlock = defineComponent({
     reasoning: { type: String, default: "" },
     thinking: { type: Boolean, default: false },
   },
-  setup(props, { slots }) {
+  setup(props) {
     const expanded = ref(true);
     // 思考结束 → 自动收起；开始新一轮 → 重新展开
     watch(
@@ -201,7 +162,6 @@ const roleConfig = computed<BubbleListProps["role"]>(() => ({
     placement: "start",
     header: (_: unknown, info: any) => {
       const config = THOUGHT_CHAIN_CONFIG.value[info.status];
-
       if (!config) {
         return null;
       }
@@ -216,15 +176,19 @@ const roleConfig = computed<BubbleListProps["role"]>(() => ({
         title: config.title,
       });
     },
-    // footer: (content: string, info: any) => {
-    //   const items = footerItems(info.key, content, info.status, info.extraInfo);
+    footer: (content: string, info: any) => {
+      
+      // 获取最新的本地消息内容，用于重新生成时传递给 onReload
+      const latestLocalMessage = messages.value.filter((msg) => msg.status === 'local').at(-1);
+      
+      const items = footerItems(info.key, content, latestLocalMessage?.message.content , info.status, info.extraInfo);
 
-    //   if (!items.length) {
-    //     return null;
-    //   }
+      if (!items.length) {
+        return null;
+      }
 
-    //   return h("div", { style: { display: "flex" } }, [h(Actions, { items })]);
-    // },
+      return h("div", { style: { display: "flex" } }, [h(Actions, { items })]);
+    },
     contentRender: (content: string, info: any) => {
       const reasoning: string | undefined = info.extraInfo?.reasoning;
 
