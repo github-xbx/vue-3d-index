@@ -102,7 +102,10 @@ const THOUGHT_CHAIN_CONFIG = computed<
   },
 }));
 
-const alliyun = new AliyunModel();
+const alliyun = new AliyunModel(
+  import.meta.env.JAVA_QWEN_APIKEY, 
+  "https://ws-2gcnpdewhflb89dx.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
+);
 
 const langchainRequest = new LangChainXRequest("/api.langchain", {
   manual: true,

@@ -14,5 +14,5 @@
     },
   },
   
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "apps/**/*.vue", "packages/**/*.ts"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"]
 }
