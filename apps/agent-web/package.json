@@ -1,0 +1,15 @@
+{
+  "name": "@app/3d-index-web",
+  "version": "1.0.0",
+  "description": "3d web首页",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "xing",
+  "license": "ISC",
+  "devDependencies": {
+
+  }
+}

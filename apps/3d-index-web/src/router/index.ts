@@ -14,21 +14,21 @@ const router = createRouter({
       name: 'home',
       component: HomePage
     },
-    {
-      path: '/copilot',
-      name: 'Copilot',
-      component: () => import('../views/ai/CopilotPage.vue')
-    },
-    {
-      path: '/test',
-      name: 'Test',
-      component: () => import('../views/langchain/Test.vue')
-    },
-    {
-      path: '/chat',
-      name: 'Chat',
-      component: () => import('../views/chat/DesignChat.vue')
-    }
+    // {
+    //   path: '/copilot',
+    //   name: 'Copilot',
+    //   component: () => import('../views/ai/CopilotPage.vue')
+    // },
+    // {
+    //   path: '/test',
+    //   name: 'Test',
+    //   component: () => import('../views/langchain/Test.vue')
+    // },
+    // {
+    //   path: '/chat',
+    //   name: 'Chat',
+    //   component: () => import('../views/chat/DesignChat.vue')
+    // }
   ]
 })
 
