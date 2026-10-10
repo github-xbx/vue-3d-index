@@ -2,20 +2,21 @@
   "name": "@packages/ai-langchain",
   "version": "1.0.0",
   "description": "typescript langchain",
-  "main": "index.js",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsdown"
   },
   "keywords": [],
   "author": "xing",
   "license": "ISC",
   "dependencies": {
+    "@antdv-next/x-sdk": "^0.0.4",
     "@langchain/core": "^1.2.9",
-    "langchain": "^1.5.10",
-    "@langchain/openai": "^1.5.8"
+    "@langchain/openai": "^1.5.8",
+    "langchain": "^1.5.10"
   },
   "devDependencies": {
-    
-    
+    "tsdown": "^0.23.0"
   }
 }

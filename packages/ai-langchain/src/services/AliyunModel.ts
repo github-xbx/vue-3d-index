@@ -2,13 +2,22 @@ import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage } from "@langchain/core/messages";
 
 export class AliyunModel {
+
+    private apiKey: string;
+    private baseUrl: string = "https://ws-2gcnpdewhflb89dx.cn-beijing.maas.aliyuncs.com/compatible-mode/v1";
+    constructor(apiKey: string, baseUrl: string) {
+        this.apiKey = apiKey;
+        this.baseUrl = baseUrl;
+    }
+
+
     public qwen(reasoningEffort: boolean = false): ChatOpenAI{
         // 创建 open ai 实例，使用的模型需兼容 openai 的接口
         const qwenModel = new ChatOpenAI({
-            apiKey: import.meta.env.JAVA_QWEN_APIKEY,
+            apiKey: this.apiKey,
             model: "qwen3.7-flash",
             configuration: {
-                baseURL: "https://ws-2gcnpdewhflb89dx.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+                baseURL: this.baseUrl,
             },
             temperature: 0.9,
            

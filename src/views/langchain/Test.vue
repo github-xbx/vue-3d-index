@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AliyunModel } from '../../services/langchain/AliyunModel';
+import { AliyunModel } from '../../../packages/ai-langchain/src/services/AliyunModel';
 import { ref } from 'vue';
 
 const model = new AliyunModel();

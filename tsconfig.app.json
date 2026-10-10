@@ -1,5 +1,5 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.dom.json",
+   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "types": ["vite/client"],
@@ -14,5 +14,5 @@
     },
   },
   
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "apps/**/*.vue"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "apps/**/*.vue", "packages/**/*.ts"]
 }
