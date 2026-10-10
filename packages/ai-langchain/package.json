@@ -1,0 +1,29 @@
+{
+  "name": "@packages/ai-langchain",
+  "version": "1.0.0",
+  "description": "typescript langchain",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsdown"
+  },
+  "keywords": [],
+  "author": "xing",
+  "license": "ISC",
+  "dependencies": {
+    "@antdv-next/x-sdk": "^0.0.4",
+    "@langchain/core": "^1.2.9",
+    "@langchain/openai": "^1.5.8",
+    "langchain": "^1.5.10"
+  },
+  "devDependencies": {
+    "tsdown": "^0.23.0"
+  },
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./services/AliyunModel": "./dist/services/AliyunModel.mjs",
+    "./services/LangChainChatProvider": "./dist/services/LangChainChatProvider.mjs",
+    "./services/LangChainXRequest": "./dist/services/LangChainXRequest.mjs",
+    "./package.json": "./package.json"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@app/3d-index-web",
+  "version": "1.0.0",
+  "description": "3d three web首页",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite"
+  },
+  "keywords": [],
+  "author": "xing",
+  "license": "ISC",
+  "dependencies": {
+    "three": "^0.184.0",
+    "vue": "^3.5.32",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.6",
+    "@types/three": "^0.184.0",
+    "vue-tsc": "^3.2.7",
+    "vite": "^8.0.10",
+    "@vue/tsconfig": "^0.9.1"
+  }
+}

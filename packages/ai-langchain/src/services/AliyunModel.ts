@@ -1,0 +1,63 @@
+import { ChatOpenAI } from "@langchain/openai";
+import { HumanMessage } from "@langchain/core/messages";
+
+export class AliyunModel {
+
+    private apiKey: string;
+    private baseUrl: string = "https://ws-2gcnpdewhflb89dx.cn-beijing.maas.aliyuncs.com/compatible-mode/v1";
+    constructor(apiKey: string, baseUrl: string) {
+        this.apiKey = apiKey;
+        this.baseUrl = baseUrl;
+    }
+
+
+    public qwen(reasoningEffort: boolean = false): ChatOpenAI{
+        // 创建 open ai 实例，使用的模型需兼容 openai 的接口
+        const qwenModel = new ChatOpenAI({
+            apiKey: this.apiKey,
+            model: "qwen3.7-flash",
+            configuration: {
+                baseURL: this.baseUrl,
+            },
+            temperature: 0.9,
+           
+            modelKwargs: {
+                enable_thinking: reasoningEffort
+            }
+            
+        });
+        return qwenModel;
+    }
+
+    /**
+     * 创建一个聊天请求，返回模型的响应
+     * @param prompt 请求消息
+     * @returns 
+     */
+    public async chat(prompt: string): Promise<String> {
+
+        const response = await this.qwen().invoke([
+            new HumanMessage(prompt)
+        ]);
+        console.log("DEBUG => ", response);
+        return response.text;
+
+    }
+
+
+    /**
+     * 流式输出
+     * @param prompt 
+     */
+    public chatStream(prompt: string, signal?: AbortSignal, reasoningEffort?: boolean ): Promise<ReadableStream> {
+        const messages = [new HumanMessage(prompt)];
+
+        // 1. 调用 .stream() 获取一个异步迭代器
+        const stream = this.qwen(reasoningEffort).stream(messages, {reasoningEffort: "none", signal: signal});
+
+       return stream;
+
+    }
+
+
+}
