@@ -28,7 +28,7 @@ import { CopilotChat, CopilotKitProvider, CopilotThreadsDrawer  } from "@copilot
 import type { ToolsMenuItem } from "@copilotkit/vue";
 import "@copilotkit/vue/styles.css";
 
-import { MyChatLabels } from "../../composables/copilotKit/utils.ts";
+import { MyChatLabels } from "@/utils/CopilotChatUtils";
 import SuggestionComponent from "../../components/ai/SuggestionComponent.vue";
 
 const url = import.meta.env.VITE_AI_URL;
