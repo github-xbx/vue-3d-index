@@ -18,5 +18,12 @@
   },
   "devDependencies": {
     "tsdown": "^0.23.0"
+  },
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./services/AliyunModel": "./dist/services/AliyunModel.mjs",
+    "./services/LangChainChatProvider": "./dist/services/LangChainChatProvider.mjs",
+    "./services/LangChainXRequest": "./dist/services/LangChainXRequest.mjs",
+    "./package.json": "./package.json"
   }
 }

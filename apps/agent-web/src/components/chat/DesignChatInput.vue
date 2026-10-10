@@ -108,7 +108,7 @@ import {
     ProfileOutlined,
     CloudUploadOutlined
 } from "@antdv-next/icons";
-import { agentItems, type SenderProps, handleLangChainRequest, isRequesting } from "@/hooks/chat/useDesignChat";
+import { agentItems, type SenderProps, handleLangChainRequest, isRequesting } from "@/hooks/useDesignChat";
 
 
 

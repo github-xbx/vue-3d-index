@@ -1,15 +1,20 @@
 import { h, computed } from "vue";
-import type {ActionsFeedbackProps, SenderProps, ThoughtChainItemProps } from "@antdv-next/x";
+import type { ActionsFeedbackProps, SenderProps, ThoughtChainItemProps } from "@antdv-next/x";
 
-import {DeepSeekFilled, QwenFilled,} from "@antdv-next/icons";
+import { DeepSeekFilled, QwenFilled, } from "@antdv-next/icons";
 import type {
   MessageInfo,
   XModelMessage,
 } from "@antdv-next/x-sdk";
-import {AliyunModel} from "@/services/langchain/AliyunModel"
-import {LangChainChatProvider, type LangChainMessage} from "@/services/langchain/LangChainChatProvider"
+import {
+  AliyunModel,
+  LangChainXRequest,
+  LangChainChatProvider,
+  type LangChainMessage
+} from "@packages/ai-langchain"
+
 import { useXChat } from '@antdv-next/x-sdk'
-import { LangChainXRequest } from "@/services/langchain/LangChainXRequest";
+
 
 
 interface AgentInfoItem {
@@ -44,7 +49,7 @@ const AgentInfo: Record<string, AgentInfoItem> = {
       title: "深度搜索",
       closable: true,
     }
-    
+
   },
   qwen: {
     icon: QwenFilled,
@@ -60,7 +65,7 @@ const AgentInfo: Record<string, AgentInfoItem> = {
       title: "代码助手",
       closable: true,
     },
-    
+
   },
 };
 
@@ -99,17 +104,17 @@ const THOUGHT_CHAIN_CONFIG = computed<
 
 const alliyun = new AliyunModel();
 
-const langchainRequest = new LangChainXRequest("/api.langchain",{
+const langchainRequest = new LangChainXRequest("/api.langchain", {
   manual: true,
   produce: async function* (params, signal) {
-    const stream = await alliyun.chatStream(params.query,signal);
+    const stream = await alliyun.chatStream(params.query, signal);
     for await (const chunk of stream) {
       // 获取思考流式输出
       const rawReasoning = chunk.additional_kwargs?.reasoning_content;
 
       const reasoning = typeof rawReasoning === "string" ? rawReasoning : "";
-      const content = typeof chunk.content === "string"?chunk.content : "";
-      if(!reasoning && !content)
+      const content = typeof chunk.content === "string" ? chunk.content : "";
+      if (!reasoning && !content)
         continue;
       yield {
         reasoning: reasoning || undefined,
@@ -127,27 +132,27 @@ const provider = new LangChainChatProvider(langchainRequest);
 
 
 // ---- 3. useXChat 管理数据流 ----
-const {messages,onRequest,isRequesting,abort, onReload} = useXChat({
+const { messages, onRequest, isRequesting, abort, onReload } = useXChat({
   provider,
   requestPlaceholder: (): LangChainMessage => ({
     content: '思考中...',
     role: "assistant",
   }),
-  requestFallback: (_, { error }) : LangChainMessage => {
+  requestFallback: (_, { error }): LangChainMessage => {
     if (error.name === 'AbortError') {
-      return {content: '已取消请求', role: 'assistant' }
+      return { content: '已取消请求', role: 'assistant' }
     }
-    return {content: '请求失败，请检查 API 配置后重试。', role: 'assistant' }
+    return { content: '请求失败，请检查 API 配置后重试。', role: 'assistant' }
   },
 })
 
 
 /** 提交：库自己管 loading → updating → success/error，不需要手写循环 */
-const handleLangChainRequest = (userQuery:string) => {
-    onRequest({query: userQuery, history: []})
+const handleLangChainRequest = (userQuery: string) => {
+  onRequest({ query: userQuery, history: [] })
 
 }
 
 
 export { agentItems, THOUGHT_CHAIN_CONFIG, messages, handleLangChainRequest, isRequesting, abort, onReload };
-export type { SenderProps, ChatMessage,MessageInfo };
+export type { SenderProps, ChatMessage, MessageInfo };

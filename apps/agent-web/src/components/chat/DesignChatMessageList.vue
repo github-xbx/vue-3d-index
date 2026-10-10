@@ -14,8 +14,8 @@ import { XMarkdown } from "@antdv-next/x-markdown";
 // x-markdown-light 这个 class 的样式来自主题包，不引入的话标题/表格/代码块/段落间距全都不生效
 import "@antdv-next/x-markdown/themes/light.css";
 import { GlobalOutlined, SyncOutlined } from '@antdv-next/icons'
-import { THOUGHT_CHAIN_CONFIG, messages, onReload,} from "@/hooks/chat/useDesignChat";
-import type { ChatMessage, MessageInfo  } from "@/hooks/chat/useDesignChat";
+import { THOUGHT_CHAIN_CONFIG, messages, onReload,} from "@/hooks/useDesignChat";
+import type { ChatMessage, MessageInfo  } from "@/hooks/useDesignChat";
 
 
 

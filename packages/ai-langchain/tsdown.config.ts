@@ -4,9 +4,10 @@ import { defineConfig } from "tsdown";
 
 export default defineConfig([
     {
-        entry: ["src/services/*.ts"],
+        entry: ["src/index.ts","src/services/*.ts"],
         format: ["esm"],
         dts: true,
         clean: true,
+        exports: true, // 自动生成 exports 字段
     }
 ]);

@@ -8,4 +8,4 @@
 @import "@antdv-next/tailwind/compat.css";
 
 /* 4. 导入 antdv-next 的重置样式（可选，但推荐） */
-@import 'antdv-next/dist/reset.css' layer(antd);
+@import 'ant-design-vue/dist/reset.css' layer(antd);

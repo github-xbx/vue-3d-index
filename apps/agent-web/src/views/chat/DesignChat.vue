@@ -20,7 +20,7 @@
 import DesignChatMessageList from '@/components/chat/DesignChatMessageList.vue'
 import DesignChatWelcome from "@/components/chat/DesignChatWelcome.vue";
 import DesignChatInput from "@/components/chat/DesignChatInput.vue";
-import { messages} from "@/hooks/chat/useDesignChat";
+import { messages} from "@/hooks/useDesignChat";
 import { computed , } from 'vue';
 
 

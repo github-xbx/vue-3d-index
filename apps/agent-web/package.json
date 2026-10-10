@@ -1,15 +1,19 @@
 {
-  "name": "@app/3d-index-web",
+  "name": "@app/agent-web",
   "version": "1.0.0",
   "description": "3d web首页",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite"
   },
   "keywords": [],
   "author": "xing",
   "license": "ISC",
   "dependencies": {
+    "@packages/ai-langchain": "workspace:*",
+
+    "@antdv-next/icons": "^1.1.2",
     "@antdv-next/x": "^1.2.3",
     "@antdv-next/x-markdown": "^0.1.4",
     "@antdv-next/x-sdk": "^0.0.4",
@@ -21,10 +25,10 @@
   "devDependencies": {
     "@antdv-next/tailwind": "^1.1.2",
     "@tailwindcss/vite": "^4.3.3",
-    "tailwindcss": "^4.3.3",
     "@vitejs/plugin-vue": "^6.0.6",
     "@vue/tsconfig": "^0.9.1",
-    "vue-tsc": "^3.2.7",
-    "vite": "^8.0.10"
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.0.10",
+    "vue-tsc": "^3.2.7"
   }
 }

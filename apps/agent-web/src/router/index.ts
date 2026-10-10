@@ -12,17 +12,17 @@ const router = createRouter({
     {
       path: '/copilot',
       name: 'Copilot',
-      component: () => import('../views/ai/CopilotPage.vue')
+      component: () => import('@/views/ai/CopilotPage.vue')
     },
     {
       path: '/test',
       name: 'Test',
-      component: () => import('../views/langchain/Test.vue')
+      component: () => import('@/views/langchain/Test.vue')
     },
     {
       path: '/chat',
       name: 'Chat',
-      component: () => import('../views/chat/DesignChat.vue')
+      component: () => import('@/views/chat/DesignChat.vue')
     }
   ]
 })

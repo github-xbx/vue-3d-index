@@ -22,7 +22,7 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     server: {
-      port: Number(env.VITE_APP_PORT) || 8080, // 端口号
+      port: Number(env.VITE_APP_PORT) || 8090, // 端口号
       open: false, // 启动服务时自动打开浏览器
       strictPort: true,  // 端口被占用时直接失败，而不是换端口
       // proxy: {
