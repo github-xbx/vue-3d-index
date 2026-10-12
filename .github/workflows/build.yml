@@ -60,7 +60,7 @@ jobs:
 
       # 4. 构建项目
       - name: Build all project
-        run: pnpm --filter "...[origin/master]" --if-present build # 构建所有项目，过滤条件为当前分支为 master 的项目
+        run: pnpm --filter "...[origin/master]" run --if-present build # 构建所有项目，过滤条件为当前分支为 master 的项目
 
       # 5. 把产物目录整体传给下一个 job
       - name: Upload build output (temp)
