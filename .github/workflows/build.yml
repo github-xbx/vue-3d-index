@@ -1,51 +1,102 @@
 # .github/workflows/build.yml
-name: Build Vite Project
+name: CI
 
 on:
-    push:
-        # 当代码推送到 main 分支时触发
-        branches:
-            - main
-            - master
-    pull_request:
-        # 当有 PR 请求时触发
-        branches:
-            - main
-            - master
-    workflow_dispatch: # 允许手动触发工作流
-
+  push:
+    # 当代码推送到 main 分支时触发
+    branches:
+      - main
+      - master
+  pull_request:
+    # 当有 PR 请求时触发
+    branches:
+      - main
+      - master
+  workflow_dispatch: # 允许手动触发工作流
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  # 拿到apps 下的项目列表
+  list-apps:
+    runs-on: unbuntu-latest
+    outputs:
+      apps: ${{ steps.set.outputs.apps }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: set
+        run: |
+          APPS=$(ls -1 apps | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "apps=$APPS" >> "$GITHUB_OUTPUT"
 
-        steps:
-            # 1. 检出代码
-            - name: Checkout code
-              uses: actions/checkout@v4
 
-            # 2. 设置 Node.js 环境
-            - name: Set up Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: '22'
-                  cache: 'npm'
 
-            # 3. 安装依赖 (使用 npm ci 进行更快、更可靠的安装)    
-            - name: Install dependencies
-              run: npm ci
-              
-            # 4. 构建项目
-            - name: Build project
-              run: npm run build  # 执行 package.json 中的 build 脚本
 
-            
-            # 5. 上传构建产物 作为工作流的输出    
-            - name: Upload zip artifact
-              uses: actions/upload-artifact@v4
-              with:
-                  name: 3d-index                # Artifact 的名称（在 Actions 页面显示）
-                  path: dist/                   # Vite 默认输出目录
-                  if-no-files-found: error      # 如果文件不存在则报错，防止静默失败
-                  retention-days: 30            # 指定保留天数（默认90天）
-             
+  build:
+    needs: list-apps
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 检出代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 获取完整的 Git 历史记录，以便在构建时使用 Git 信息
+
+      # 2. 设置 pnpm
+      - name: setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 12
+
+      # 2. 设置 Node.js 环境
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      # 3. 安装依赖
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile # 使用 pnpm 安装依赖，并确保锁文件未被修改
+
+      # 4. 构建项目
+      - name: Build all project
+        run: pnpm --filter "...[origin/master]" --if-present build # 构建所有项目，过滤条件为当前分支为 master 的项目
+
+      # 5. 把产物目录整体传给下一个 job
+      - name: Upload build output (temp)
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: apps/*/dist
+          if-no-files-found: ignore
+          retention-days: 1
+
+  # 每个 app 独立打 zip、独立上传        
+  package:
+    needs: [list-apps, build]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app: ${{ fromJson(needs.list-apps.outputs.apps) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download build output
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: apps
+      
+      - name: Zip ${{ matrix.app}}
+        run: |
+          cd apps/${{ matrix.app }}/dist
+          zip -r "${{ matrix.app }}.zip" .
+      
+      - name: Upload ${{ matrix.app }} artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-${{ matrix.app }}
+          path: apps/${{ matrix.app }}/dist/${{ matrix.app }}.zip
+          if-no-files-found: error
+          retention-days: 7
