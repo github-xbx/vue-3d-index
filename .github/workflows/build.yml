@@ -17,7 +17,7 @@ on:
 jobs:
   # 拿到apps 下的项目列表
   list-apps:
-    runs-on: unbuntu-latest
+    runs-on: ubuntu-latest
     outputs:
       apps: ${{ steps.set.outputs.apps }}
     steps:
