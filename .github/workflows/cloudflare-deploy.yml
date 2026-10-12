@@ -81,12 +81,20 @@ jobs:
                     exit 1
                 fi
 
+            - name: Ensure Pages project exists
+              env:
+                CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+              run: |
+                pnpm exec wrangler pages project create ${{ github.event.inputs.app }} \
+                    --production-branch=master || true
+
             - name: Deploy to Cloudflare Pages
-              uses: cloudflare/wrangler-action@v3
-              with:
-                apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-                accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-                command: >-
-                    pages deploy apps/${{ github.event.inputs.app }}/dist
+              env:
+                CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+              run: |
+                pnpm exec wrangler pages deploy apps/${{ github.event.inputs.app }}/dist \
                     --project-name=${{ github.event.inputs.app }}
-                    ${{ github.event.inputs.environment == 'preview' && '--branch=preview' || '' }}
+
+        
