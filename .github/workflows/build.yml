@@ -88,15 +88,10 @@ jobs:
           name: build-output
           path: apps
       
-      - name: Zip ${{ matrix.app}}
-        run: |
-          cd apps/${{ matrix.app }}/dist
-          zip -r "${{ matrix.app }}.zip" .
-      
       - name: Upload ${{ matrix.app }} artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-${{ matrix.app }}
-          path: apps/${{ matrix.app }}/dist/${{ matrix.app }}.zip
+          path: apps/${{ matrix.app }}/dist
           if-no-files-found: error
           retention-days: 7
