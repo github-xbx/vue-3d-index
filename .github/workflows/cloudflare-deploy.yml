@@ -1,0 +1,92 @@
+name: Deploy to Cloudflare Pages
+
+on:
+    workflow_dispatch:
+        inputs:
+            app:
+                description: '3d-index-web' #'要部署的应用（apps 下的目录名）'
+                required: true
+                type: choice
+                options:
+                - agent-web
+                - 3d-index-web
+            environment:
+                description: '部署环境'
+                required: true
+                default: 'production'
+                type: choice
+                options:
+                - production
+                - preview
+            run_id:
+                description:  #'构建运行的 Run ID（留空则使用最近一次成功的 build.yml 运行）'
+                required: false
+                type: string
+
+jobs:
+    resolve-run:
+        runs-on: ubuntu-latest
+        outputs:
+            run_id: ${{ steps.resolve.outputs.run_id }}
+        steps:
+            - name: Resolve run_id
+              id: resolve
+              env:
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                INPUT_RUN_ID="${{ github.event.inputs.run_id }}"
+                if [ -n "$INPUT_RUN_ID" ]; then
+                    echo "使用手动指定的 run_id: $INPUT_RUN_ID"
+                    echo "run_id=$INPUT_RUN_ID" >> "$GITHUB_OUTPUT"
+                else
+                    # 找到最近一次成功的 build.yml 运行
+                    RUN_ID=$(gh run list \
+                    --repo "${{ github.repository }}" \
+                    --workflow "build.yml" \
+                    --status success \
+                    --limit 1 \
+                    --json databaseId \
+                    --jq '.[0].databaseId')
+                    if [ -z "$RUN_ID" ]; then
+                    echo "::error::没有找到成功的 build.yml 运行"
+                    exit 1
+                    fi
+                    echo "使用最近一次成功的 build run_id: $RUN_ID"
+                    echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+                fi
+    
+    deploy:
+        needs: resolve-run
+        runs-on: ubuntu-latest
+        environment: ${{ github.event.inputs.environment }}
+        steps:
+            - name: Download build artifact
+              uses: actions/download-artifact@v4
+              with:
+                name: build-output
+                path: apps
+                run-id: ${{ needs.resolve-run.outputs.run_id }}
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Debug - list downloaded files
+              run: |
+                echo "===== apps 目录结构 ====="
+                find apps -maxdepth 3 -type d | head -50
+
+            - name: Verify app dist exists
+              run: |
+                APP="${{ github.event.inputs.app }}"
+                if [ ! -d "apps/$APP/dist" ]; then
+                    echo "::error::apps/$APP/dist 不存在，检查 artifact 里是否包含该应用的产物"
+                    exit 1
+                fi
+
+            - name: Deploy to Cloudflare Pages
+              uses: cloudflare/wrangler-action@v3
+              with:
+                apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+                command: >-
+                    pages deploy apps/${{ github.event.inputs.app }}/dist
+                    --project-name=${{ github.event.inputs.app }}
+                    ${{ github.event.inputs.environment == 'preview' && '--branch=preview' || '' }}
