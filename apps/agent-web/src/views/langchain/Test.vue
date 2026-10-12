@@ -3,10 +3,15 @@
 </template>
 
 <script lang="ts" setup>
-import { AliyunModel } from '../../../packages/ai-langchain/src/services/AliyunModel';
+import {
+  AliyunModel,
+} from "@packages/ai-langchain"
 import { ref } from 'vue';
 
-const model = new AliyunModel();
+const model = new AliyunModel(
+  import.meta.env.JAVA_QWEN_APIKEY, 
+  "https://ws-2gcnpdewhflb89dx.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
+);
 
 model.chat("你好").then((response) => {
   console.log("模型响应:", response);
