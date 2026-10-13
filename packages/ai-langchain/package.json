@@ -14,7 +14,8 @@
     "@antdv-next/x-sdk": "^0.0.4",
     "@langchain/core": "^1.2.9",
     "@langchain/openai": "^1.5.8",
-    "langchain": "^1.5.10"
+    "langchain": "^1.5.10",
+    "zod": "^4.6.6"
   },
   "devDependencies": {
     "tsdown": "^0.23.0"
