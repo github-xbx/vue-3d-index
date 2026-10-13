@@ -88,7 +88,7 @@ jobs:
                 apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
                 accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
                 # 关键：指定部署命令和参数
-                command: pages deploy apps/${{ github.event.inputs.app }}/dist --project-name=${{ github.event.inputs.app }}
+                command: deploy --assets apps/${{ github.event.inputs.app }}/dist --name ${{ github.event.inputs.app }} --latest
                 
               
             # - name: Ensure Pages project exists
