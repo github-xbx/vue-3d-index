@@ -61,22 +61,6 @@ jobs:
         environment: ${{ github.event.inputs.environment }}
         steps:
 
-            # ↓↓↓ 这三步必须加，缺一不可 ↓↓↓
-            - name: Setup pnpm
-              uses: pnpm/action-setup@v4
-              with:
-                version: 12
-
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                node-version: 22
-                #cache: 'pnpm'
-
-            - name: Install dependencies
-              run: pnpm install --frozen-lockfile
-            # ↑↑↑ 这三步必须加，缺一不可 ↑↑↑
-
             - name: Download build artifact
               uses: actions/download-artifact@v4
               with:
@@ -97,21 +81,30 @@ jobs:
                     echo "::error::apps/$APP/dist 不存在，检查 artifact 里是否包含该应用的产物"
                     exit 1
                 fi
+            
+            - name: publish to cloudflare pages
+              uses: cloudflare/wrangler-action@v3
+              with:
+                apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+                # 关键：指定部署命令和参数
+                command: pages deploy apps/${{ github.event.inputs.app }}/dist --project-name=${{ github.event.inputs.app }}
+                
+              
+            # - name: Ensure Pages project exists
+            #   env:
+            #     CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+            #     CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+            #   run: |
+            #     pnpm exec wrangler pages project create ${{ github.event.inputs.app }} \
+            #         --production-branch=master || true
 
-            - name: Ensure Pages project exists
-              env:
-                CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-                CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-              run: |
-                pnpm exec wrangler pages project create ${{ github.event.inputs.app }} \
-                    --production-branch=master || true
-
-            - name: Deploy to Cloudflare Pages
-              env:
-                CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-                CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-              run: |
-                pnpm exec wrangler pages deploy apps/${{ github.event.inputs.app }}/dist \
-                    --project-name=${{ github.event.inputs.app }}
+            # - name: Deploy to Cloudflare Pages
+            #   env:
+            #     CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+            #     CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+            #   run: |
+            #     pnpm exec wrangler pages deploy apps/${{ github.event.inputs.app }}/dist \
+            #         --project-name=${{ github.event.inputs.app }}
 
         
