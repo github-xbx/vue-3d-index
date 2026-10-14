@@ -1,6 +1,6 @@
 {
 
-
+    "extends": "../../tsconfig.json",
     "compilerOptions": {
         "composite": false, // 关闭 composite 模式
         "declaration": false // tsdown 会自行处理 .d.ts

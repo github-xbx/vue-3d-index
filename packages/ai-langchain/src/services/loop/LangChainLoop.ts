@@ -40,11 +40,14 @@ const chainAgent = async (apiKey:string, baseUrl:string) => {
     });
 
     const result = await agent.invoke({messages: "请帮我计算一下 35℃ 等于多少 °F"});
-
+    console.log("result => ", result);
     console.log(result.messages.at(-1)?.content);
 }
 
 
-chainAgent("your_api_key", "your_base_url").catch(console.error);
 
 
+
+
+
+export { chainAgent }

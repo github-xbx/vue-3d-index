@@ -1,9 +1,5 @@
 {
-  "files": [],
-  "references": [
-    
-    
-  ],
+
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "target": "es2023",

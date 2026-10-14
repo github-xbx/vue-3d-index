@@ -50,6 +50,10 @@ export default defineConfig(({ command, mode }) => {
     },
     base: env.VITE_BASE_URL || '/',  //基础路径，影响所有资源引用
     publicDir: 'public',
+    test: {
+      // 测试文件匹配模式
+      include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    }
   }
 })
 
