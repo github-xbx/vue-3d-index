@@ -10,11 +10,12 @@
   "keywords": [],
   "author": "xing",
   "license": "ISC",
-  "dependencies": {
-   
-  },
+  "dependencies": {},
   "devDependencies": {
     "tsdown": "^0.23.0"
+  },
+  "exports": {
+    ".": "./dist/types.mjs",
+    "./package.json": "./package.json"
   }
- 
 }
