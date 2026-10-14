@@ -4,7 +4,7 @@ import { defineConfig } from "tsdown";
 
 export default defineConfig([
     {
-        entry: ["src/*.ts","src/services/*.ts"],
+        entry: ["src/*.ts"],
         format: ["esm"],
         dts: true,
         clean: true,

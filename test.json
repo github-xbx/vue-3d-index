@@ -1,0 +1,7 @@
+{
+    "print":{
+        "logo": "图片Base64",
+        "header":"页眉",
+        "footer":"页脚"
+    }
+}

@@ -1,11 +1,12 @@
 import {createAgent,tool} from "langchain"
 import {z} from "zod"
 import { AliyunModel } from "../AliyunModel"
+import { type ToolRun, type ToolMsg } from "@packages/ai-tools"
 
 
 // 定义工具
 const searchTool = tool(
-    async({query} : {query: string}) => {
+    ({query} : {query: string}) => {
         return `${query} 35℃`
     },
     {
@@ -18,7 +19,7 @@ const searchTool = tool(
 )
 
 const calculatorTool = tool(
-    async ({text}:{text: string}) => {
+    ({text}:{text: string}) => {
         return `calculation result for ${text}`
     },
     {
@@ -30,16 +31,30 @@ const calculatorTool = tool(
     }
 )
 
+const testrun : ToolRun = ({text}) => {
+    return `ToolRun output ${text}`
+}
+
+const testMesage : ToolMsg = {
+    name:"test",
+    description:"测试 tool",
+    schema: {
+        "text": "输出一段字符串"
+    }
+}
+
+const testTool = tool(testrun, testMesage);
+
 
 const chainAgent = async (apiKey:string, baseUrl:string) => {
 
     const agent = createAgent({
         model: new AliyunModel(apiKey, baseUrl).qwen(),
-        tools: [searchTool, calculatorTool],
+        tools: [searchTool, calculatorTool, testTool],
         
     });
 
-    const result = await agent.invoke({messages: "请帮我计算一下 35℃ 等于多少 °F"});
+    const result = await agent.invoke({messages: "输出一段文字"});
     console.log("result => ", result);
     console.log(result.messages.at(-1)?.content);
 }
