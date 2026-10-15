@@ -6,3 +6,4 @@ allowBuilds:
   esbuild: true  #极快的 JS 打包器	postinstall 下载/校验对应平台的二进制
   sharp: true    #高性能图片处理库	postinstall 编译/下载 libvips 原生绑定
   workerd: true  #Cloudflare Workers 运行时	postinstall 下载对应平台的运行时二进制
+#blockExoticSubdeps: false
