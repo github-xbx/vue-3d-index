@@ -28,7 +28,8 @@
     "./services/LangChainChatProvider": "./dist/services/LangChainChatProvider.mjs",
     "./services/LangChainXRequest": "./dist/services/LangChainXRequest.mjs",
     "./services/loop/LangChainLoop": "./dist/services/loop/LangChainLoop.mjs",
-    "./services/vfs/Vfs": "./dist/services/vfs/Vfs.mjs",
+    "./services/vfs": "./dist/services/vfs/index.mjs",
+    "./tools/CodeSanner": "./dist/tools/CodeSanner.mjs",
     "./package.json": "./package.json"
   }
 }

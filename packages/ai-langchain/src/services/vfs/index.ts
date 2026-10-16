@@ -51,8 +51,20 @@ const fileScanning = async (initialFiles: Record<string, string>, scanPattern: s
 }
 
 
-const filesToScan = await fileScanning({
-  "/src/*": "",
-  
-});
-console.log(`准备扫描 ${filesToScan.length} 个文件`);
+
+
+
+
+
+
+const vfs = async (): Promise<VfsBackend>  => {
+    const backednd: VfsBackend  = await VfsBackend.create({});
+    return backednd;
+}
+
+const vfsStop = (backednd: VfsBackend) => {
+    backednd.stop();
+}
+
+
+export { vfs, vfsStop}
