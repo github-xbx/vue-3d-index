@@ -52,6 +52,7 @@ export default defineConfig(({ command, mode }) => {
     publicDir: 'public',
     test: {
       // 测试文件匹配模式
+       testTimeout: 50000,  // 默认 5000
       include: ['src/**/*.{test,spec}.{ts,tsx}'],
     }
   }

@@ -1,4 +1,6 @@
 import { VfsBackend } from "@langchain/node-vfs"
+import { readdirSync, readFileSync } from "node:fs";
+import { join, relative } from "node:path";
 
 interface ScannedFile {
     path: string;
@@ -51,6 +53,33 @@ const fileScanning = async (initialFiles: Record<string, string>, scanPattern: s
 }
 
 
+/**
+ * 读取本地文件，构造成 [vfsPath, content][] 的数组
+ * @param localRoot  本地文件路径
+ */
+const collectFiles = (localRoot:string): Array<[string, Uint8Array]> => {
+
+    const files: Array<[string, Uint8Array]> = [];
+
+    const walk = (dir: string) => {
+        for(const entry of readdirSync(dir, {withFileTypes: true})) {
+            const fullPath = join(dir, entry.name);
+            if (entry.isDirectory()){
+                walk(fullPath);
+            }else if(entry.isFile()){
+                const relPath = relative(localRoot, fullPath).replace("\\","/");
+                files.push([`${relPath}`, readFileSync(fullPath)]);
+            }
+        }
+    }
+
+    walk(localRoot);
+
+    return files;
+}
+
+
+
 
 
 
@@ -67,4 +96,4 @@ const vfsStop = (backednd: VfsBackend) => {
 }
 
 
-export { vfs, vfsStop}
+export { vfs, vfsStop, collectFiles}

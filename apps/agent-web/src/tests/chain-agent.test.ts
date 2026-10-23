@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest'
 
 console.log("JAVA_QWEN_APIKEY => ", import.meta.env.JAVA_QWEN_APIKEY);
 
-
+// 命令 npx vitest
 describe('chainAgent', () => {
     it('should return the correct result', async () => {
         await chainAgent(

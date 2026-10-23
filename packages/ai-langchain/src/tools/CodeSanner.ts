@@ -1,5 +1,5 @@
 import { DynamicStructuredTool, DynamicTool, tool } from "@langchain/core/tools";
-import {vfs} from "../services/vfs/index"
+import {vfs, collectFiles} from "../services/vfs/index"
 
 
 const  vfsBackend =  await vfs();
@@ -9,8 +9,11 @@ const  vfsBackend =  await vfs();
 
 
 const globFilesToolFunction = async ({pattern} : {pattern:string}) => {
+    console.log("pattern",pattern,"vfs",vfsBackend)
     const result = await vfsBackend.glob(pattern);
+    console.log("result",result)
     const files = (result.files ?? []).filter(e => !e.is_dir);
+    console.log("files",files)
     return files.map(f => f.path).join("\n");
 }
 const readFileToolFunction = async ({filePath}: {filePath: string}) => {
@@ -92,6 +95,14 @@ const grepContentTool = tool(
 )
 
 type ToolType = DynamicTool | DynamicStructuredTool
+
+
+
+
+const files = await globFilesToolFunction({pattern: "E:\\code\\vue-3d-index\\apps\\3d-index-web\\"});
+console.log(collectFiles("E:\\code\\vue-3d-index\\apps\\3d-index-web\\"));
+
+
 
 
 const codeSannerTools :ToolType[] = [globFilesTool, readFileTool, grepContentTool]
