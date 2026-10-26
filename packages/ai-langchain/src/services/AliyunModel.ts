@@ -15,7 +15,7 @@ export class AliyunModel {
         // 创建 open ai 实例，使用的模型需兼容 openai 的接口
         const qwenModel = new ChatOpenAI({
             apiKey: this.apiKey,
-            model: "qwen3.7-flash",
+            model: "qwen3.8-max",
             configuration: {
                 baseURL: this.baseUrl,
             },
