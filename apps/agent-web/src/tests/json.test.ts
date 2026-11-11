@@ -1,0 +1,12 @@
+import { describe, it, expect } from 'vitest'
+
+
+//npx vitest src/tests/json.test.ts
+describe('test', () => {
+    it('json', () => {
+        const str = "{\"粉料1(粉煤灰)\":{\"actual\":174.6,\"errorPercent\":0.0057603684,\"errorValue\":1,\"id\":2648873,\"materialTitle\":\"水泥4\",\"plateId\":258350,\"plateNo\":\"2\",\"recipe\":80,\"standardTitle\":\"粉料1(粉煤灰)\",\"theory\":173.6},\"外加剂1(减水剂)\":{\"actual\":8.73,\"errorPercent\":0.0057602804,\"errorValue\":0.049999237,\"id\":2648876,\"materialTitle\":\"外加剂1\",\"plateId\":258350,\"plateNo\":\"2\",\"recipe\":4,\"standardTitle\":\"外加剂1(减水剂)\",\"theory\":8.68},\"materialTitleList\":[\"粗骨料1(石1，4.75-9.5)\",\"粗骨料2(石2，9.5-19)\",\"粗骨料3(石3，16-31.5)\",\"细骨料2(中砂2.3-3.0)\",\"水泥1(散装)\",\"粉料1(粉煤灰)\",\"水\",\"外加剂2(引气剂)\",\"外加剂1(减水剂)\"],\"水泥1(散装)\":{\"actual\":695,\"errorPercent\":8.640201E-4,\"errorValue\":0.5999756,\"id\":2648872,\"materialTitle\":\"水泥2\",\"plateId\":258350,\"plateNo\":\"2\",\"recipe\":320,\"standardTitle\":\"水泥1(散装)\",\"theory\":694.4},\"细骨料2(中砂2.3-3.0)\":{\"actual\":1691,\"errorPercent\":-0.004708652,\"errorValue\":-8,\"id\":2648871,\"materialTitle\":\"骨料15（小石）\",\"plateId\":258350,\"plateNo\":\"2\",\"recipe\":783,\"standardTitle\":\"细骨料2(中砂2.3-3.0)\",\"theory\":1699},\"水\":{\"actual\":251.2,\"errorPercent\":-0.001986492,\"errorValue\":-0.5,\"id\":2648874,\"materialTitle\":\"煤灰2\",\"plateId\":258350,\"plateNo\":\"2\",\"recipe\":116,\"standardTitle\":\"水\",\"theory\":251.7},\"粗骨料2(石2，9.5-19)\":{\"actual\":1207,\"errorPercent\":-0.004946414,\"errorValue\":-6,\"id\":2648869,\"materialTitle\":\"骨料12（中石）\",\"plateId\":258350,\"plateNo\":\"2\",\"recipe\":559,\"standardTitle\":\"粗骨料2(石2，9.5-19)\",\"theory\":1213},\"粗骨料1(石1，4.75-9.5)\":{\"actual\":489,\"errorPercent\":0.0061728396,\"errorValue\":3,\"id\":2648868,\"materialTitle\":\"骨料13（大石）\",\"plateId\":258350,\"plateNo\":\"2\",\"recipe\":224,\"standardTitle\":\"粗骨料1(石1，4.75-9.5)\",\"theory\":486},\"粗骨料3(石3，16-31.5)\":{\"actual\":730,\"errorPercent\":0.0041265474,\"errorValue\":3,\"id\":2648870,\"materialTitle\":\"细骨料（砂）\",\"plateId\":258350,\"plateNo\":\"2\",\"recipe\":335,\"standardTitle\":\"粗骨料3(石3，16-31.5)\",\"theory\":727},\"外加剂2(引气剂)\":{\"actual\":4.32,\"errorPercent\":-0.0046082903,\"errorValue\":-0.01999998,\"id\":2648875,\"materialTitle\":\"水\",\"plateId\":258350,\"plateNo\":\"2\",\"recipe\":2,\"standardTitle\":\"外加剂2(引气剂)\",\"theory\":4.34}}";
+ 
+        const json = JSON.parse(str);
+        console.log(json);
+    })
+})
